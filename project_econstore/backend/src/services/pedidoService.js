@@ -1,5 +1,5 @@
 const db = require('../config/db');
-const ProductModel = require('../models/productModel'); // ⬅️ importar o modelo de produto
+const ProductModel = require('../models/productModel');
 
 exports.criarPedido = async (produtos, total, status, id_usuario) => {
   const pool = await db.getPool();
@@ -21,7 +21,7 @@ exports.criarPedido = async (produtos, total, status, id_usuario) => {
 
     // 2. Criar pedido
     const [pedidoResult] = await conn.query(
-      'INSERT INTO pedidos (id_usuario, valor_total, status_pedido, data_pedido) VALUES (?, ?, ?, NOW())',
+      'INSERT INTO Pedidos (id_usuario, valor_total, status_pedido, data_pedido) VALUES (?, ?, ?, NOW())', // Também corrigi 'pedidos' para 'Pedidos' para consistência
       [id_usuario, total, status]
     );
 
@@ -41,7 +41,8 @@ try {
 }
 
       await conn.query(
-        'INSERT INTO itens_pedido (id_pedido, id_produto, quantidade, preco_unitario) VALUES (?, ?, ?, ?)',
+        // CORRIGIDO: Nome da tabela de 'itens_pedido' para 'ItensPedido'
+        'INSERT INTO ItensPedido (id_pedido, id_produto, quantidade, preco_unitario) VALUES (?, ?, ?, ?)',
         [
           pedidoId,
           produto.id,

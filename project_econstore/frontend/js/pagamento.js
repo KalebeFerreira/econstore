@@ -1,8 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const btnFinalizar = document.getElementById("checkout-btn");
+  // Agora pega o botão 'Confirmar Pagamento' da página pagamento.html
+  const btnConfirmarPagamentoHtml = document.getElementById("confirmar-pagamento-btn-html");
+
   const modal = document.createElement("div");
 
-  // Criação do modal de pagamento com botão X
+  // Criação do modal de pagamento com botão X (conteúdo HTML do modal)
   modal.innerHTML = `
   <div style="
     position: fixed;
@@ -82,19 +84,15 @@ document.addEventListener("DOMContentLoaded", () => {
 `;
 
   modal.style.display = "none";
-  document.body.appendChild(modal);
+  document.body.appendChild(modal); // O modal é anexado ao body AQUI
 
-  // Botão que exibe o modal
-  btnFinalizar.addEventListener("click", () => {
-    modal.style.display = "flex";
-  });
-
+  // Agora que o modal está no DOM, podemos adicionar os listeners aos seus elementos internos
   // Botão "X" que fecha o modal
   modal.querySelector("#fechar-modal").addEventListener("click", () => {
     modal.style.display = "none";
   });
 
-  // Botão que finaliza o pagamento
+  // Botão que finaliza o pagamento dentro do modal
   modal.querySelector("#finalizar-pagamento").addEventListener("click", async () => {
     const numeroCartao = document.getElementById("numero-cartao").value.trim();
     const senhaCartao = document.getElementById("senha-cartao").value.trim();
@@ -112,13 +110,14 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const status = (numeroCartao && senhaCartao) ? "aprovado" : "pendente";
+    // Corrigido: Status com a primeira letra maiúscula para corresponder ao ENUM do MySQL
+    const status = (numeroCartao && senhaCartao) ? "Aprovado" : "Pendente";
 
     const pedido = {
       id_usuario: usuario.id_usuario,
       produtos: carrinho,
       total: carrinho.reduce((acc, item) => acc + (item.preco * item.quantidade), 0),
-      status
+      status: status
     };
 
     try {
@@ -132,14 +131,27 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify(pedido)
       });
 
-      if (!res.ok) throw new Error("Erro ao salvar pedido.");
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.detalhes || "Erro ao salvar pedido.");
+      }
 
-      alert(`Pedido ${status === "aprovado" ? "realizado com sucesso!" : "pendente de confirmação."}`);
+      alert(`Pedido ${status === "Aprovado" ? "realizado com sucesso!" : "pendente de confirmação."}`);
       localStorage.removeItem("carrinho");
       window.location.href = "index.html";
     } catch (err) {
-      alert("Produto selecionado sem estoque suficiente.");
+      alert("Erro ao finalizar pedido: " + err.message);
       console.error(err);
     }
   });
+
+  // Listener para o botão 'Confirmar Pagamento' da página pagamento.html para exibir o modal
+  if (btnConfirmarPagamentoHtml) { // Verifica se o botão existe antes de adicionar o listener
+    btnConfirmarPagamentoHtml.addEventListener("click", (e) => {
+      e.preventDefault(); // Impede o envio padrão do formulário HTML
+      modal.style.display = "flex"; // Exibe o modal
+    });
+  } else {
+    console.warn("Elemento #confirmar-pagamento-btn-html não encontrado."); // Avisa se o ID estiver errado
+  }
 });

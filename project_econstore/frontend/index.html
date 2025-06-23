@@ -36,8 +36,20 @@
     }
 
     .categoria-menu span {
-      cursor: default;
+      cursor: pointer; /* Alterado para indicar que é clicável */
       text-transform: uppercase;
+      padding: 5px 10px; /* Adicionado padding para melhor área de clique */
+      border-radius: 5px; /* Bordas arredondadas */
+      transition: background-color 0.3s ease; /* Transição suave */
+    }
+
+    .categoria-menu span:hover {
+      background-color: #f0f0f0; /* Cor de fundo ao passar o mouse */
+    }
+
+    .categoria-menu span.active {
+      background-color: #000; /* Fundo escuro para a categoria ativa */
+      color: #fff; /* Texto branco para a categoria ativa */
     }
 
     .product-grid {
@@ -68,18 +80,16 @@
  <main>
   <div class="container">
     
-      <!-- Menu visual de categorias -->
       <div class="categoria-menu">
-        <span>Blusas</span>
-        <span>Calças</span>
-        <span>Tênis</span>
-        <span>Sapatos</span>
-        <span>Ternos</span>
+        <span data-categoria="Camisetas">Blusas</span>
+        <span data-categoria="Calças">Calças</span>
+        <span data-categoria="Tenis">Tênis</span>
+        <span data-categoria="Sapatos">Sapatos</span>
+        <span data-categoria="Ternos">Ternos</span>
       </div>
 
       <section class="product-grid" id="product-listing-grid">
-        <!-- Produtos carregados via JS -->
-      </section>
+        </section>
     
   </div>
 </main>
@@ -88,7 +98,6 @@
         <p>&copy; 2025 Econstore. Todos os direitos reservados. <a href="login_funcionario.html" style="color: #aaa; text-decoration: none;">Área do Lojista</a></p>
     </footer>
 
-  <!-- Font Awesome para ícone de carrinho -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js" defer></script>
   <script src="js/produtos.js"></script>
 </body>
