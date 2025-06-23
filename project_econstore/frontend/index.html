@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Econstore - Produtos</title>
+  <link rel="stylesheet" href="css/index.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <script>
+    window.onload = function () {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = 'login.html';
+      } else {
+        document.getElementById("logout-link").style.display = "inline";
+        document.getElementById("login-link")?.remove();
+      }
+    };
+
+    function logout() {
+      localStorage.removeItem('token');
+      window.location.href = 'login.html';
+    }
+  </script>
+  <style>
+    /* Menu de categorias visual */
+    .categoria-menu {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 30px 0 20px;
+      font-weight: bold;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    .categoria-menu span {
+      cursor: default;
+      text-transform: uppercase;
+    }
+
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="logo">Econstore</h1>
+    <nav>
+      <ul>
+        <li>
+          <a href="carrinho.html" class="cart-icon">
+            <i class="fas fa-shopping-cart"></i> (<span id="cart-count">0</span>)
+          </a>
+        </li>
+        <li>
+          <a href="#" id="logout-link" style="display: none;" onclick="logout()">Logout</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+ <main>
+  <div class="container">
+    
+      <!-- Menu visual de categorias -->
+      <div class="categoria-menu">
+        <span>Blusas</span>
+        <span>Calças</span>
+        <span>Tênis</span>
+        <span>Sapatos</span>
+        <span>Ternos</span>
+      </div>
+
+      <section class="product-grid" id="product-listing-grid">
+        <!-- Produtos carregados via JS -->
+      </section>
+    
+  </div>
+</main>
+
+    <footer>
+        <p>&copy; 2025 Econstore. Todos os direitos reservados. <a href="login_funcionario.html" style="color: #aaa; text-decoration: none;">Área do Lojista</a></p>
+    </footer>
+
+  <!-- Font Awesome para ícone de carrinho -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js" defer></script>
+  <script src="js/produtos.js"></script>
+</body>
+</html>

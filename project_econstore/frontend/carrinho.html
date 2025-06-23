@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras - Econstore</title>
+    <link rel="stylesheet" href="css/carrinho.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>Econstore</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Ínicio</a></li>
+                 <li>          
+                    <a href="carrinho.html" class="cart-icon">
+                     <i class="fas fa-shopping-cart"></i> (<span id="cart-count">0</span>)
+                    </a>
+                </li>
+                <li><a href="login.html" id="login-link">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+ <div class="categoria-menu">
+  <span>Blusas</span>
+  <span>Calças</span>
+  <span>Tênis</span>
+  <span>Sapatos</span>
+  <span>Ternos</span>
+</div>
+
+
+
+
+    <div class="container">
+        <main>
+            <h2>Seu Carrinho de Compras</h2>
+            <section id="cart-items-section">
+                <!-- Itens do carrinho serão carregados aqui via JS -->
+             <p id="empty-cart-message" style="display:none; text-align:center;">Seu carrinho está vazio.</p>
+            </section>
+            <section id="cart-summary">
+                <h3>Resumo do Pedido</h3>
+                <p>Subtotal: R$ <span id="cart-subtotal">0.00</span></p>
+                <p>Frete: R$ <span id="cart-shipping">0.00</span> (Calculado no próximo passo)</p>
+                <p><strong>Total: R$ <span id="cart-total">0.00</span></strong></p>
+               <button class="btn" id="checkout-btn">Finalizar Compra</button>
+            </section>
+        </main>
+    </div>
+    <footer>
+        <p>&copy; 2025 Econstore. Todos os direitos reservados. <a href="login_funcionario.html" style="color: #aaa; text-decoration: none;">Área do Lojista</a></p>
+    </footer>
+    <script src="js/carrinho.js"></script> 
+
+
+ <script src="./js/pagamento.js" defer></script>
+</body>
+</html>
+

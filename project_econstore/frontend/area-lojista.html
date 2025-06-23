@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Funcionário - Econstore Admin</title>
+    <link rel="stylesheet" href="css/admin_style.css"> <!-- CSS específico para admin -->
+</head>
+<body>
+  <header class="admin-header">
+  <h1>Econstore - Painel Administrativo</h1>
+  <nav>
+    <ul>
+      <li><a href="admin_gerenciar_produtos.html">Gerenciar Produtos</a></li>
+      <li><a href="ver-pedidos.html">Gerenciar Pedidos</a></li>
+      <li><a href="index.html">Sair (Voltar à Loja)</a></li>
+    </ul>
+  </nav>
+</header>
+    <div class="container admin-container">
+        <main>
+            <h2>Bem-vindo, Lojista!</h2>
+            <p>Este é o seu painel de controle da Econstore. Utilize o menu acima para gerenciar sua loja.</p>
+            
+            <section class="dashboard-summary">
+                <div class="summary-card">
+                    <h3>Total de Produtos</h3>
+                    <p id="total-produtos-summary">--</p>
+                    <a href="admin_gerenciar_produtos.html" class="btn">Ver Produtos</a>
+                </div>
+                <div class="summary-card">
+                    <h3>Pedidos</h3>
+                    <p id="pedidos-pendentes-summary">--</p>
+                    <a href="ver-pedidos.html" class="btn">Ver Pedidos</a>
+                </div>
+                <div class="summary-card">
+                    <h3>Total de Clientes</h3>
+                    <p id="total-clientes-summary">--</p>
+                    <!-- <a href="admin_gerenciar_clientes.html" class="btn">Ver Clientes</a> -->
+                </div>
+            </section>
+
+            <!-- Adicionar mais seções conforme necessário, como links rápidos ou gráficos -->
+
+        </main>
+    </div>
+
+    <script src="js/admin_main.js"></script> 
+</body>
+</html>
+

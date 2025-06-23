@@ -1,0 +1,9 @@
+- [X] 1. Analisar os requisitos e protótipos fornecidos no documento PDF.
+- [X] 2. Esclarecer dúvidas e confirmar preferências com o usuário sobre o desenvolvimento do projeto.
+- [X] 3. Ajustar o escopo e as premissas do projeto com base no feedback do usuário.
+- [X] 4. Modelar o banco de dados MySQL, incluindo a criação dos scripts SQL para a estrutura das tabelas e para a população inicial de dados.
+- [X] 5. Desenvolver o backend da aplicação utilizando Node.js e Express.js, implementando a API, as rotas necessárias, a lógica de negócio e a comunicação com o banco de dados MySQL.
+- [X] 6. Desenvolver o frontend da aplicação utilizando HTML e CSS puros, criando as páginas de forma responsiva e de acordo com os protótipos fornecidos.
+- [X] 7. Preparar os entregáveis finais, incluindo o código-fonte completo, e elaborar a documentação do projeto (arquivo README.md com instruções detalhadas para configuração e execução local).
+- [X] 8. Realizar uma validação completa dos entregáveis, assegurando que todos os requisitos e diretrizes do projeto foram atendidos.
+- [ ] 9. Apresentar o projeto finalizado ao usuário, fornecendo todos os arquivos e a documentação.

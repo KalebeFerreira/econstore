@@ -1,0 +1,563 @@
+1
+
+Universidade Católica de Brasília
+Pró-Reitoria Acadêmica
+Curso de Análise e Desenvolvimento de Sistemas
+Trabalho de Disciplina de Teste de Software
+
+DOCUMENTAÇÃO ECONSTORE
+
+Autor(a):
+GABRIEL SAMPAIO
+GUSTAVO FERNANDES
+GUSTAVO MEDEIROS
+KALEBE LUCAS
+PABLO GABRIEL
+Orientador: Prof. Oscar Galdino de Oliveira Júnior
+
+Brasília - DF
+2025
+
+2
+
+LISTA DE FIGURAS
+
+Figura 1 - Diagrama de Casos de Uso de Software............................................................10
+Figura 2 - Tela de criação de novo projeto............................................................11
+Figura 3 - MER: Modelo de Entidade-Relacionamento..........................................................12
+Figura 4 - MFD: Modelo Físico de Dados............................................................13
+
+SUMÁRIO
+
+1 INTRODUÇÃO.................................................................................. 3
+1.1 DIAGNÓSTICO DA EMPRESA / TEMA.............................................. 4
+2 OBJETIVOS.................................................................................... 5
+2.1 OBJETIVO GERAL......................................................................... 5
+2.2 OBJETIVOS ESPECÍFICOS................................................................. 5
+3 PROPOSTA DO SISTEMA.................................................................. 6
+3.1 DESCRIÇÃO DO SISTEMA PROPOSTO.................................................. 6
+3.2 RESULTADOS ESPERADOS................................................................. 6
+4 FERRAMENTAS UTILIZADAS................................................................. 7
+5 ANÁLISE DE NEGÓCIO....................................................................... 8
+5.1 REGRAS DE NEGÓCIO....................................................................... 8
+6 ANÁLISE DE REQUISITOS.................................................................. 9
+6.1 REQUISITOS FUNCIONAIS................................................................. 9
+6.2 REQUISITOS NÃO-FUNCIONAIS......................................................... 9
+6.3 DIAGRAMA DE CASOS DE USO DA SOLUÇÃO........................................ 10
+6.3.1 Visão Geral dos Casos de Uso e Atores.......................................... 12
+6.4 DIAGRAMA DE CLASSE.................................................................... 12
+6.4.1 Visão Geral do Diagrama de Classe................................................ 14
+6.4.2 Protótipo de Telas de Sistema....................................................................15
+6.4.2.1.1....................................................................20
+
+REFERÊNCIAS.................................................................................... 21
+
+3
+
+4
+
+1
+
+INTRODUÇÃO
+A tecnologia da informação desempenha um papel essencial nas organizações
+
+modernas, promovendo melhorias na eficiência, na comunicação e no controle de processos
+internos. A computação, ao ser aplicada de forma estratégica, torna-se uma ferramenta
+indispensável tanto para grandes corporações quanto para pequenos empreendimentos,
+democratizando o acesso a soluções inovadoras e capazes de transformar a realidade
+operacional de diversas áreas. O uso de sistemas informatizados permite a automação de tarefas
+repetitivas, a organização de dados e o suporte à tomada de decisão baseada em informações
+concretas.
+No contexto específico deste trabalho, observa-se que pequenos lojistas enfrentam
+desafios significativos na gestão de seus produtos e pedidos. Muitos desses empreendedores
+ainda utilizam métodos manuais ou planilhas simples para controlar seu estoque, o que pode
+acarretar erros, retrabalho e prejuízos. Além disso, a crescente digitalização do comércio exige
+uma presença online eficiente para que essas lojas consigam competir e se manter sustentáveis
+no mercado. Diante disso, o sistema proposto busca solucionar essa lacuna, oferecendo uma
+ferramenta acessível e intuitiva para que pequenos comerciantes possam profissionalizar sua
+operação de vendas pela internet.
+O presente projeto propõe o desenvolvimento de um sistema web denominado
+Econstore, voltado para a automatização dos processos de cadastro de produtos, controle de
+estoque, gestão de pedidos e atendimento ao cliente. A proposta visa permitir que lojistas
+realizem a gestão de suas lojas virtuais de forma simplificada, sem a necessidade de
+conhecimentos técnicos aprofundados. Além disso, o sistema contempla funcionalidades
+básicas de comércio eletrônico, como carrinho de compras e login de clientes, mantendo o foco
+em usabilidade e clareza nas operações.
+A estrutura deste trabalho está dividida em capítulos específicos. Inicialmente,
+apresenta-se o diagnóstico da empresa e o contexto que motivou o desenvolvimento do sistema.
+Em seguida, são descritos os objetivos gerais e específicos, a proposta do sistema e os resultados
+esperados com sua implantação. Posteriormente, detalham-se as ferramentas utilizadas no
+desenvolvimento, a análise de negócio e os requisitos do sistema, tanto funcionais quanto não
+funcionais. Por fim, são apresentados os diagramas, protótipos de tela e histórias de usuário que
+compõem a solução desenvolvida.
+
+5
+
+•
+
+DIAGNÓSTICO DA ECONSTORE/ TEMA
+
+A Econstore é uma pequena loja voltada para comercio de roupas. A motivação principal surgiu
+da observação de lojistas que ainda operam seus negócios de maneira manual ou pouco
+sistematizada, enfrentando dificuldades para acompanhar o fluxo de vendas, atualizar estoques
+em tempo real e organizar os pedidos. Essa limitação reduz a competitividade das lojas e
+compromete a experiência do cliente. A solução propõe-se a simplificar esse cenário,
+oferecendo uma plataforma que centraliza essas operações de forma acessível, responsiva e de
+fácil aprendizado.
+
+6
+
+2
+
+OBJETIVOS
+
+Este capítulo descreve os propósitos que nortearam a concepção do sistema Econstore. Os
+objetivos foram definidos com base nas necessidades identificadas durante a análise do contexto
+organizacional, visando a entrega de um sistema funcional, intuitivo e útil para o público-alvo.
+
+•
+
+OBJETIVO GERAL
+
+Desenvolver um sistema web intuitivo para a Econstore, possibilitando o cadastro e
+gerenciamento de produtos, controle de pedidos e interação com clientes, facilitando a
+digitalização de negócios locais com foco em simplicidade e eficiência operacional.
+
+•
+
+OBJETIVOS ESPECÍFICOS
+•
+•
+•
+•
+•
+•
+
+Permitir o cadastro, edição e exclusão de produtos.
+Implementar controle de estoque automatizado.
+Permitir o cadastro e autenticação de clientes.
+Disponibilizar um carrinho de compras funcional.
+Criar uma área administrativa para gestão de pedidos.
+Gerar relatórios simples com base nas vendas realizadas.
+
+7
+
+3
+
+PROPOSTA DO SISTEMA
+
+A seguir será apresentada a proposta do sistema, visando detalhar os principais pontos a
+serem seguidos.
+
+•
+
+DESCRIÇÃO DO SISTEMA PROPOSTO
+
+O Econstore é um sistema web destinado a facilitar o gerenciamento de pequenas lojas virtuais.
+Seu foco é permitir que lojistas administrem produtos, estoques e pedidos sem complexidade.
+Diferente de plataformas robustas e muitas vezes inacessíveis para pequenos empreendedores,
+o futuro sistema da Econstore oferece uma solução compacta e eficiente.
+Dentre as principais funcionalidades, destacam-se:
+•
+•
+•
+•
+•
+
+•
+
+Cadastro de produtos com imagens, descrição, preço e quantidade disponível.
+Gestão de pedidos com atualização de status.
+Área do cliente com login, visualização de pedidos e histórico de compras.
+Carrinho de compras dinâmico.
+Interface simples e responsiva, acessível por desktop e dispositivos móveis.
+
+RESULTADOS ESPERADOS
+Com a implantação do sistema Econstore, esperam-se os seguintes resultados:
+➢
+➢
+➢
+➢
+➢
+➢
+➢
+
+4
+
+Redução de tarefas manuais repetitivas.
+Otimização do controle de estoque e pedidos.
+Melhoria na comunicação entre lojistas e clientes.
+Aumento da credibilidade do negócio com presença online estruturada.
+Redução de erros operacionais.
+Facilidade de acesso ao sistema.
+Maior organização e controle das vendas realizadas.
+
+FERRAMENTAS UTILIZADAS
+
+Para o desenvolvimento do sistema Econstore, foram utilizadas as seguintes tecnologias:
+•
+•
+•
+•
+
+Front-end: JavaScript, HTML e CSS.
+Back-end: Node.js com Express
+Banco de dados: MySQL
+Ambiente de modelagem e design: Figma
+
+8
+
+•
+•
+•
+
+Controle de versão: Git e GitHub
+IDE: Visual Studio Code
+Testes: Jest (unitários)
+
+9
+
+5
+
+ANÁLISE DE NEGÓCIO
+Neste capítulo será descrito, através de diagramas e especificações, o processo do
+
+negócio em que o software em questão será inserido, sendo estes o diagrama do modelo de caso
+de uso de negócio, diagrama do modelo de classes do negócio, e, por fim, o diagrama de
+atividades.
+
+•
+
+REGRAS DE NEGÓCIO
+Número
+RN1
+RN2
+
+Nome
+Cadastro
+de
+Produtos
+Cadastro de Cliente
+
+Descrição
+Setor
+Apenas o lojista pode cadastrar, editar Administrativo
+e excluir produtos
+O cliente deve preencher nome Cliente
+completo, CPF, Telefone, e-mail,
+endereço e senha para realizar o
+cadastro
+no
+sistema.
+
+RN03
+
+Autenticação
+Cliente
+
+de O cliente deve estar autenticado para Cliente
+finalizar uma compra
+
+RN04
+
+Controle de Estoque
+
+Produto fora de estoque não pode ser Administrativo
+comprado
+
+RN05
+
+Status de Pedido
+
+Apenas o lojista pode alterar o status Administrativo
+dos pedidos
+
+RN06
+
+E-mail Único
+
+Cada cliente deve ter um e-mail único Cliente
+no sistema
+
+10
+
+6
+
+ANÁLISE DE REQUISITOS
+
+Este capítulo descreve os requisitos necessários para o funcionamento do sistema, divididos
+entre funcionais e não funcionais.
+
+•
+
+•
+
+REQUISITOS FUNCIONAIS
+Número
+RF1
+
+Requisitos Funcionais
+O sistema deve permitir o cadastro de produtos
+
+RF2
+RF3
+
+O sistema deve permitir o gerenciamento de estoque
+
+O sistema deve permitir o gerenciamento de pedidos
+
+RF4
+
+O sistema deve permitir o cadastro e login de clientes e
+funcionarios
+
+RF5
+
+O sistema deve oferecer carrinho de compras
+
+RF6
+
+O sistema deve gerar relatórios de pedidos realizados
+
+REQUISITOS NÃO-FUNCIONAIS
+Número
+RNF1
+RNF2
+
+Requisitos Não-Funcionais
+Interface deve ser intuitiva e de fácil navegação
+
+RNF3
+
+Sistema deve ser responsivo para uso em celulares
+
+6..1.1.1
+
+Deve haver diferenciação entre os usuários
+
+DIAGRAMA DE CASOS DE USO DA SOLUÇÃO
+
+O diagrama de casos de uso representa as principais interações dos usuários com o sistema
+Econstore. Nele, destacam-se os diferentes perfis de usuários, como clientes, administradores e
+vendedores, e as funcionalidades acessíveis a cada um. Entre os casos de uso mais relevantes
+estão o cadastro de usuários, login, navegação por produtos, adição ao carrinho, finalização de
+
+11
+
+compras e gestão de pedidos. Esse diagrama é essencial para visualizar, de forma clara, os
+requisitos funcionais da aplicação.
+
+Fonte: Elaboração própria, 2025
+
+6..2
+
+Visão Geral dos Casos de Uso e Atores
+1.
+
+Cliente: Usuário final que acessa a plataforma para realizar compras. Pode se cadastrar, fazer
+login, navegar pelos produtos, adicionar itens ao carrinho, finalizar pedidos e acompanhar o
+andamento de suas compras. • Lojista: Usuário responsável por gerenciar a oferta de produtos
+na plataforma. Pode fazer login, cadastrar novos produtos, editar os já existentes, visualizar
+pedidos realizados por clientes e alterar o status desses pedidos (ex: “em preparação”,
+“enviado”, “entregue”).
+
+2. Casos de Uso por Ator
+3. Ações do Cliente • Cadastrar-se: Permite que o cliente crie uma conta na plataforma
+fornecendo suas informações pessoais e de contato. • Fazer login: Permite que o cliente acesse
+sua conta com credenciais válidas. • Visualizar produtos: Exibe uma lista de produtos
+disponíveis, incluindo informações como nome, preço, descrição e imagem. • Adicionar
+produtos ao carrinho: O cliente pode selecionar produtos e adicioná-los a um carrinho de
+
+12
+
+compras virtual. • Finalizar pedido: Após escolher os produtos desejados, o cliente pode
+realizar o pagamento e registrar a compra. • Acompanhar pedidos: O cliente pode visualizar o
+status dos pedidos já realizados, acompanhando o andamento até a entrega.
+4. Ações do Lojista • Fazer login: Permite que o lojista acesse o sistema com suas credenciais
+para gerenciar sua loja. • Cadastrar produto: O lojista pode adicionar novos produtos,
+informando nome, preço, descrição e imagens. • Editar produto: Permite a modificação de
+produtos já cadastrados, alterando informações como preço ou estoque. • Visualizar pedidos:
+O lojista tem acesso aos pedidos feitos por clientes para seus produtos. • Alterar status dos
+pedidos: Após receber um pedido, o lojista pode atualizar seu status conforme o andamento
+(ex: em preparação, enviado, entregue).
+
+•
+
+DIAGRAMA DE CLASSE
+
+O diagrama de classe define a estrutura principal do sistema, apresentando as classes que
+compõem a Econstore, seus atributos, métodos e os relacionamentos entre elas. Ele oferece uma
+visão lógica e estática da arquitetura do sistema, servindo como base para a implementação do
+back-end e integração com o banco de dados.
+
+13
+
+6..1
+
+Visão Geral do digrama de Classe
+
+Fonte: Elaboração própria, 2025
+
+14
+
+6..2
+
+Protótipos de Tela do Sistema
+Tela login
+
+Tela cadastro
+
+Tela login Funcionario
+
+15
+
+Página inicial
+
+Tela menu funcionario
+
+16
+
+Tela produto
+
+Tela pagamento
+
+17
+
+Tela gerenciamento de Produtos
+
+18
+
+Tela gerenciamento de Pedidos
+
+6..2.1.1
+
+Histórias de Usuário
+
+Gerenciamento de Produtos pela Loja
+Descrição
+Os administradores da plataforma devem poder cadastrar, editar e excluir produtos para que os
+clientes possam visualizá-los e comprá-los. O objetivo é garantir que as informações estejam sempre
+atualizadas.
+Critérios de Aceitação
+
+19
+
+• Apenas administradores têm acesso a essa funcionalidade.
+• Os campos nome, descrição, preço, quantidade e categoria devem ser preenchidos.
+Regras de Negócio
+• Nenhum produto deve ser cadastrado com nome repetido dentro da mesma categoria.
+• As informações precisam ser validadas antes de serem salvas.
+História de Usuário
+Como administrador, quero gerenciar os produtos disponíveis na loja para garantir que os clientes
+vejam informações corretas e atualizadas.
+Cenários BDD
+• Se um administrador preenche todos os dados corretamente, o produto deve ser cadastrado.
+• Se um cliente tentar acessar essa área, o sistema deve informar que ele não tem permissão.
+
+Cadastro de Novos Clientes
+Descrição
+Os clientes precisam informar seus dados básicos para criarem uma conta na plataforma e realizarem
+compras.
+Critérios de Aceitação
+• Todos os campos obrigatórios devem ser preenchidos: nome completo, CPF, telefone, e-mail,
+endereço e senha.
+• O CPF deve ser válido e único.
+• O e-mail não pode já estar cadastrado.
+Regras de Negócio
+• A senha deve conter no mínimo 8 caracteres, com ao menos um número e um símbolo.
+• Nenhum cliente pode ter e-mail ou CPF duplicado.
+História de Usuário
+Como cliente, quero me cadastrar na plataforma para poder fazer minhas compras de forma prática e
+segura.
+Cenários BDD
+• Se os dados estiverem corretos e não houver duplicidade, o cadastro é concluído.
+• Se o CPF já existir, o sistema deve avisar: “CPF já cadastrado”.
+
+20
+
+Login de Cliente
+Descrição
+Para concluir uma compra, o cliente precisa estar autenticado, garantindo a segurança da transação e o
+vínculo do pedido à conta correta.
+Critérios de Aceitação
+• Só é possível comprar estando logado.
+• O login exige e-mail e senha válidos.
+Regras de Negócio
+• Após autenticação, o cliente deve receber um token de acesso.
+• A sessão deve ser segura e protegida.
+História de Usuário
+Como cliente, quero fazer login com meu e-mail e senha para poder concluir minhas compras com
+segurança.
+Cenários BDD
+• Com login correto, o cliente pode acessar o carrinho e finalizar o pedido.
+• Se não estiver logado, ao tentar comprar, é redirecionado para o login.
+
+Gerenciamento de Estoque
+Descrição
+Produtos sem estoque não devem ser vendidos. O sistema precisa impedir que um item esgotado seja
+comprado.
+Critérios de Aceitação
+• Produtos zerados devem aparecer como “indisponíveis”.
+• Não é possível adicionar ao carrinho um item sem estoque.
+Regras de Negócio
+• A quantidade deve ser verificada no momento da compra.
+• O estoque deve ser atualizado após cada pedido.
+História de Usuário
+Como cliente, quero comprar apenas produtos que estejam disponíveis, para não perder tempo com
+itens esgotados.
+Cenários BDD
+
+21
+
+• Se um produto está sem estoque, ele deve aparecer como esgotado e não pode ser adicionado ao
+carrinho.
+
+Atualização de Status de Pedidos
+Descrição
+O lojista precisa atualizar os pedidos para manter os clientes informados sobre o andamento da
+entrega.
+Critérios de Aceitação
+• Apenas administradores podem alterar o status dos pedidos.
+• O cliente deve ser notificado sempre que o status mudar.
+Regras de Negócio
+• As mudanças de status devem seguir uma sequência lógica (ex: não pode ir direto de “pendente” para
+“entregue”).
+História de Usuário
+Como lojista, quero atualizar o status dos pedidos para que os clientes saibam em que etapa está a
+entrega.
+Cenários BDD
+• Se um administrador muda o status para “Enviado”, o cliente deve receber uma notificação.
+Validação de E-mail no Cadastro
+Descrição
+Cada cliente deve ter um e-mail único para evitar duplicidade e garantir segurança no acesso à conta.
+Critérios de Aceitação
+• O sistema deve impedir o cadastro de e-mails já existentes.
+• A validação deve ocorrer no ato do cadastro.
+Regras de Negócio
+• Nenhum cliente pode ter o mesmo e-mail que outro.
+História de Usuário
+Como cliente, quero cadastrar meu e-mail de forma única para ter uma conta segura e só minha.
+Cenários BDD
+• Se o e-mail informado já existe, o sistema deve avisar com a mensagem: “E-mail já cadastrado”.
+
+22
+
+7
+
+REFERENCIAS
+
+VÍDEO 1 – YouTube (documentação de sistemas):
+SILVA, Pedro Henrique. Documentação de Software - Entenda de Forma Simples.
+YouTube, 16 fev. 2023. Disponível em: https://youtu.be/S3NLU898_Cc. Acesso em: 28
+abr. 2025.
+
+PLAYLIST – YouTube (NodeJs):
+CODEFICO. Documentação de Software. YouTube, 2023. Playlist. Disponível em:
+https://youtube.com/playlist?list=PLJ_KhUnlXUPtbtLwaxxUxHqvcNQndmI4B. Acesso
+em: 2 maio 2025.
+
+ARTIGO – Blog da Flowti (boas práticas de documentação):
+FLOWTI. Como fazer uma boa documentação de TI? Conheça boas práticas e vantagens.
+Flowti, 4 maio 2022. Disponível em: https://flowti.com.br/blog/como-fazer-uma-boadocumentacao-de-ti-conheca-boas-praticas-e-vantagens. Acesso em: 3 maio 2025
+
+

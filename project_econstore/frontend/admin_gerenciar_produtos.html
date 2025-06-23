@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gerenciar Produtos - Econstore Admin</title>
+  <link rel="stylesheet" href="css/gerenciar_admin.css"/>
+</head>
+<body>
+  <header class="admin-header">
+  <h1>Econstore - Painel Administrativo</h1>
+  <nav>
+    <ul>
+      <li><a href="area-lojista.html">Início Admin</a></li>
+      <li><a href="ver-pedidos.html">Gerenciar Pedidos</a></li>
+      <li><a href="index.html">Sair (Voltar à Loja)</a></li>
+    </ul>
+  </nav>
+</header>
+
+  <main class="container admin-container">
+    <h2>Lista de Produtos</h2>
+    <div id="produtos-container"></div>
+
+    <h3>Adicionar Novo Produto</h3>
+    <form id="formNovoProduto">
+      <input type="text" name="nome_produto" placeholder="Nome do Produto" required />
+      <input type="text" name="descricao" placeholder="Descrição" required />
+      <input type="number" name="preco" placeholder="Preço" step="0.01" required min="0" />
+      <input type="number" name="quantidade_estoque" placeholder="Estoque" required min="0" />
+      <input type="text" name="imagem_url" placeholder="URL da Imagem" required />
+      <button type="submit">Adicionar Produto</button>
+    </form>
+  </main>
+
+  <footer class="admin-footer">
+    <p>&copy; 2025 Econstore Admin Panel.</p>
+  </footer>
+
+  <script src="js/admin_gerenciar_produtos.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Detalhes do Produto</title>
+  <link rel="stylesheet" href="css/produto_detalhes.css" />
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+  <!-- Cabeçalho igual ao da index -->
+  <header>
+  <h1 class="logo">Econstore</h1>
+  <nav>
+    <ul>
+      <li>
+            <a href="carrinho.html" class="cart-icon">
+            <i class="fas fa-shopping-cart"></i> (<span id="cart-count">0</span>)
+          </a>
+      </li>
+      <li>
+       <a href="login.html" id="login-link">Logout</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+  <!-- Menu de categorias -->
+  <div class="categoria-menu">
+    <span>Blusas</span>
+    <span>Calças</span>
+    <span>Tênis</span>
+    <span>Sapatos</span>
+    <span>Ternos</span>
+  </div>
+
+  <!-- Botão Voltar -->
+  <a href="index.html" class="btn-voltar" title="Voltar">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="128" fill="black" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+    </svg>
+  </a>
+
+  <!-- Conteúdo principal do produto -->
+  <div class="produto-container">
+    <img id="imagem-produto" src="" alt="Imagem do Produto" />
+    <div class="produto-info">
+      <h1 id="nome-produto"></h1>
+      <p id="descricao-produto"></p>
+      <p>Preço: R$ <span id="preco-produto"></span></p>
+      <p>Estoque: <span id="estoque-produto"></span> unidades</p>
+      <button id="btn-comprar">Comprar</button>
+    </div>
+  </div>
+
+  <script src="js/produto_detalhes.js"></script>
+</body>
+</html>

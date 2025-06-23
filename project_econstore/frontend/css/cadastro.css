@@ -1,0 +1,128 @@
+/* Centraliza a tela de login */
+body, html {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+/* Container principal do login/cadastro */
+.login-container {
+    background-color: #1f1f1f; /* Fundo escuro do card */
+    padding: 30px;
+    border-radius: 20px;
+    width: 300px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+}
+
+/* Título */
+.login-container h2,
+.login-container h3 {
+    margin: 0 0 20px 0;
+    text-align: left;
+    font-size: 1.5em;
+    color: #ffffff;
+}
+
+
+
+/* Campos de input para login */
+.login-container input[type="email"],
+.login-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: none;
+    background-color: #eeeeee;
+    color: #000000;
+    font-size: 0.95em;
+    box-sizing: border-box;
+}
+
+/* Campos de input adicionais para cadastro */
+.login-container input[type="text"],
+.login-container input[type="tel"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: none;
+    background-color: #eeeeee;
+    color: #000000;
+    font-size: 0.95em;
+    box-sizing: border-box;
+}
+
+/* Botão de login/cadastro */
+.login-container .btn {
+    width: 100%;
+    background-color: #00e600; /* Verde vibrante */
+    color: #ffffff;
+    font-weight: bold;
+    padding: 10px;
+    font-size: 1em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.login-container .btn:hover {
+    background-color: #00cc00;
+}
+
+/* Texto e links abaixo do botão */
+.login-container .center-text {
+    color: #ffffff;
+    font-size: 0.8em;
+    text-align: left;
+    margin-top: 15px;
+}
+
+.login-container .center-text a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-container .center-text a:hover {
+    text-decoration: underline;
+}
+
+/* Remove header e footer nesta tela (opcional) */
+header, footer {
+    display: none;
+}
+
+/* Estilo para grupos de formulário no cadastro */
+.login-container .form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-container label {
+    margin-bottom: 5px;
+    font-size: 0.85em;
+    color: #ffffff;
+}
+
+/* Parágrafos informativos */
+.login-container p {
+    font-size: 0.75em;
+    color: #cccccc;
+    margin-top: 10px;
+}
+
+
+

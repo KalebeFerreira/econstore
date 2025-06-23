@@ -1,0 +1,147 @@
+/* Reset e fonte */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fff;
+  color: #000;
+ display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+header {
+  background-color: #1f1f1f;
+  padding: 20px 40px;
+  text-align: center;
+  position: relative;
+}
+
+.logo {
+  color: #fff;
+  font-size: 26px;
+  letter-spacing: 1px;
+}
+
+header nav {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+header nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+header nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+header nav ul li a:hover {
+  text-decoration: underline;
+}
+
+.cart-icon i {
+  margin-right: 5px;
+}
+
+/* Menu de categorias */
+.categoria-menu {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 25px 0;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Grade de produtos */
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 50px;
+  padding: 40px 20px;
+}
+
+/* Cartão de produto */
+.product-card {
+  width: 220px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: scale(1.05);
+}
+
+.product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-card h4 {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.product-card .price {
+  color: #00a000;
+  font-weight: bold;
+  font-size: 15px;
+  margin-top: 5px;
+}
+
+.product-card a {
+  display: inline-block;
+  margin-top: 4px;
+  text-decoration: none;
+  color: #303030;
+  font-size: 15px;
+}
+
+.product-card a:hover {
+  color: #a1a1a1;
+}
+
+/* Footer */
+footer {
+  background-color: #1f1f1f;
+  color: #ccc;
+  text-align: center;
+  padding: 20px;
+  font-size: 13px;
+}
+
+footer a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #cecece;
+  text-decoration: underline;
+}
+
+main {
+  flex: 1;
+}
