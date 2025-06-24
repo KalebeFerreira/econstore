@@ -5,13 +5,13 @@ jest.mock('../src/config/db'); // Mocka o banco de dados
 jest.mock('../src/models/productModel'); // Mocka o modelo de produto
 
 // Importar o serviço a ser testado.
-const PedidoService = require('../src/services/pedidoService');
+const PedidoService = require('../src/services/pedidoService'); //
 // Importar os mocks específicos de db.js para configurar o comportamento do pool e conexão.
-const { getPool } = require('../src/config/db');
+const { getPool } = require('../src/config/db'); //
 // Importar o mock do ProductModel para configurar seu comportamento.
-const ProductModel = require('../src/models/productModel');
+const ProductModel = require('../src/models/productModel'); //
 
-// --- DEFINIÇÕES DE MOCKS LOCAIS PARA O TESTE (similar ao que temos em outros testes) ---
+// --- DEFINIÇÕES DE MOCKS LOCAIS PARA O TESTE ---
 const mockConnection = {
     query: jest.fn(),
     release: jest.fn(),
@@ -38,53 +38,59 @@ const mockSelectResult = (rows = []) => [
 
 
 describe('PedidoService', () => {
-    beforeEach(() => {
-        jest.clearAllMocks(); // Limpa todos os mocks antes de cada teste.
+    // Usando 'id' em vez de 'id_produto' e adicionando 'preco' e 'nome_produto' para consistência
+    const commonProducts = [
+        { id: 1, quantidade: 2, preco: 50.00, nome_produto: 'Produto Teste 1', imagem: 'url_prod1.jpg' },
+        { id: 2, quantidade: 1, preco: 100.00, nome_produto: 'Produto Teste 2', imagem: 'url_prod2.jpg' }
+    ];
+    const commonTotal = 200.00;
+    const commonStatus = 'Pendente';
+    const commonUserId = 1;
 
-        // Configurar o comportamento padrão do mock de getPool para retornar nosso mockPool.
+
+    beforeEach(() => {
+        // Limpar todos os mocks antes de CADA teste para garantir isolamento.
+        jest.clearAllMocks();
+
+        // Configurar o comportamento padrão do mock de getPool e getConnection.
         getPool.mockResolvedValue(mockPool);
-        // Configurar mockPool.getConnection para retornar nossa mockConnection.
         mockPool.getConnection.mockResolvedValue(mockConnection);
 
-        // Limpar mocks específicos da conexão para cada teste.
+        // Limpar mocks específicos da conexão e ProductModel para cada teste.
         mockConnection.query.mockClear();
         mockConnection.release.mockClear();
         mockConnection.beginTransaction.mockClear();
         mockConnection.commit.mockClear();
         mockConnection.rollback.mockClear();
 
-        // Limpar mocks do ProductModel.
         ProductModel.getProductById.mockClear();
         ProductModel.updateStock.mockClear();
+
+        // Mock padrão para ProductModel.getProductById que retorna produtos existentes com estoque suficiente
+        // Este mock será usado pela maioria dos testes, a menos que seja sobrescrito localmente.
+        ProductModel.getProductById.mockImplementation(async (id) => {
+            if (id === 1) {
+                return { id_produto: 1, nome_produto: 'Produto Teste 1', quantidade_estoque: 10, preco: 50.00 };
+            } else if (id === 2) {
+                return { id_produto: 2, nome_produto: 'Produto Teste 2', quantidade_estoque: 5, preco: 100.00 };
+            }
+            return null; // Por padrão, se o ID não for 1 ou 2, retorna nulo.
+        });
+
+        // Mock padrão para ProductModel.updateStock para retornar sucesso
+        // Isso evita que ele faça chamadas internas a `conn.query` e simplifica o teste.
+        ProductModel.updateStock.mockResolvedValue(true);
     });
 
     describe('criarPedido', () => {
-        const commonProducts = [
-            { id_produto: 1, quantidade: 2 },
-            { id_produto: 2, quantidade: 1 }
-        ];
-        const commonTotal = 200.00;
-        const commonStatus = 'Pendente';
-        const commonUserId = 1;
 
         test('1. deve criar um pedido com sucesso, atualizar estoque e comitar a transação', async () => {
-            // Cenário: Todos os produtos existem e há estoque suficiente.
-            ProductModel.getProductById
-                .mockResolvedValueOnce({ id_produto: 1, quantidade_estoque: 10, preco: 50.00 }) // Produto 1
-                .mockResolvedValueOnce({ id_produto: 2, quantidade_estoque: 5, preco: 100.00 }); // Produto 2
-
-            // Mockar a inserção do pedido principal.
-            mockConnection.query.mockResolvedValueOnce(mockDMLResult(101, 1)); // id_pedido = 101
-
-            // Mockar as atualizações de estoque (uma por produto).
-            ProductModel.updateStock
-                .mockResolvedValueOnce(true) // Atualização para Produto 1
-                .mockResolvedValueOnce(true); // Atualização para Produto 2
-
-            // Mockar a inserção dos itens do pedido.
+            // Mocks para mockConnection.query na ordem exata das 3 chamadas que ocorrem
             mockConnection.query
-                .mockResolvedValueOnce(mockDMLResult(null, 1)) // Inserção item 1
-                .mockResolvedValueOnce(mockDMLResult(null, 1)); // Inserção item 2
+                .mockResolvedValueOnce(mockDMLResult(101, 1)) // 1ª: INSERT INTO Pedidos
+                .mockResolvedValueOnce(mockDMLResult(null, 1)) // 2ª: INSERT INTO ItensPedido item 1
+                .mockResolvedValueOnce(mockDMLResult(null, 1)); // 3ª: INSERT INTO ItensPedido item 2
+
 
             const result = await PedidoService.criarPedido(
                 commonProducts,
@@ -93,84 +99,84 @@ describe('PedidoService', () => {
                 commonUserId
             );
 
-            // Verificar se a transação foi iniciada e comitada.
+            // Asserções para sucesso
             expect(mockConnection.beginTransaction).toHaveBeenCalledTimes(1);
             expect(mockConnection.commit).toHaveBeenCalledTimes(1);
-            expect(mockConnection.rollback).not.toHaveBeenCalled(); // Não deve haver rollback
+            expect(mockConnection.rollback).not.toHaveBeenCalled();
+            expect(mockConnection.release).toHaveBeenCalledTimes(1);
 
-            // Verificar se ProductModel.getProductById foi chamado para cada produto.
-            expect(ProductModel.getProductById).toHaveBeenCalledTimes(2);
+            expect(ProductModel.getProductById).toHaveBeenCalledTimes(2); // Chamadas iniciais para verificar estoque
             expect(ProductModel.getProductById).toHaveBeenCalledWith(1);
             expect(ProductModel.getProductById).toHaveBeenCalledWith(2);
 
-            // Verificar se o pedido principal foi inserido.
-            expect(mockConnection.query).toHaveBeenCalledWith(
-                expect.stringContaining('INSERT INTO Pedidos'),
-                [commonTotal, commonStatus, commonUserId]
-            );
+            expect(mockConnection.query).toHaveBeenCalledTimes(3); // AGORA ESPERAMOS 3 CHAMADAS
+            
+            // Verificações explícitas das chamadas e seus argumentos
+            expect(mockConnection.query.mock.calls[0][0]).toContain('INSERT INTO Pedidos');
+            expect(mockConnection.query.mock.calls[0][1]).toEqual([commonUserId, commonTotal, commonStatus]);
 
-            // Verificar se ProductModel.updateStock foi chamado para cada produto (com quantidade negativa).
-            expect(ProductModel.updateStock).toHaveBeenCalledTimes(2);
-            expect(ProductModel.updateStock).toHaveBeenCalledWith(1, -2, mockConnection);
-            expect(ProductModel.updateStock).toHaveBeenCalledWith(2, -1, mockConnection);
+            expect(ProductModel.updateStock).toHaveBeenCalledTimes(2); // ProductModel.updateStock é chamado 2 vezes
+            expect(ProductModel.updateStock).toHaveBeenCalledWith(1, -2, mockConnection); // Com os argumentos corretos
+            expect(ProductModel.updateStock).toHaveBeenCalledWith(2, -1, mockConnection); // Com os argumentos corretos
 
-            // Verificar se os itens do pedido foram inseridos.
-            expect(mockConnection.query).toHaveBeenCalledWith(
-                expect.stringContaining('INSERT INTO ItensPedido'),
-                [101, 1, 2, 50.00] // id_pedido, id_produto, quantidade, preco_unitario
-            );
-            expect(mockConnection.query).toHaveBeenCalledWith(
-                expect.stringContaining('INSERT INTO ItensPedido'),
-                [101, 2, 1, 100.00]
-            );
+            expect(mockConnection.query.mock.calls[1][0]).toContain('INSERT INTO ItensPedido');
+            expect(mockConnection.query.mock.calls[1][1]).toEqual([101, 1, 2, 50.00]);
+            
+            expect(mockConnection.query.mock.calls[2][0]).toContain('INSERT INTO ItensPedido');
+            expect(mockConnection.query.mock.calls[2][1]).toEqual([101, 2, 1, 100.00]);
 
-            // Verificar o resultado retornado.
+
             expect(result).toEqual({ id_pedido: 101, status: commonStatus });
-            expect(mockConnection.release).toHaveBeenCalledTimes(1); // Conexão deve ser liberada
         });
 
         test('2. deve lançar erro e fazer rollback se um produto não for encontrado', async () => {
+            // SOBRESCRITO: ProductModel.getProductById para simular produto não encontrado
             ProductModel.getProductById
-                .mockResolvedValueOnce({ id_produto: 1, quantidade_estoque: 10, preco: 50.00 })
+                .mockResolvedValueOnce({ id_produto: 1, nome_produto: 'Produto Teste 1', quantidade_estoque: 10, preco: 50.00 })
                 .mockResolvedValueOnce(null); // Produto 2 não encontrado
 
             await expect(PedidoService.criarPedido(commonProducts, commonTotal, commonStatus, commonUserId))
-                .rejects.toThrow('Produto com ID 2 não encontrado.');
+                .rejects.toThrow('Produto com ID 2 não encontrado. Transação cancelada.');
 
             expect(mockConnection.beginTransaction).toHaveBeenCalledTimes(1);
             expect(mockConnection.rollback).toHaveBeenCalledTimes(1);
             expect(mockConnection.commit).not.toHaveBeenCalled();
             expect(mockConnection.release).toHaveBeenCalledTimes(1);
-            expect(ProductModel.updateStock).not.toHaveBeenCalled(); // Nenhuma atualização de estoque
+            expect(ProductModel.updateStock).not.toHaveBeenCalled();
         });
 
         test('3. deve lançar erro e fazer rollback se houver estoque insuficiente', async () => {
+            // SOBRESCRITO: ProductModel.getProductById para simular estoque 0 para o Produto 2
             ProductModel.getProductById
-                .mockResolvedValueOnce({ id_produto: 1, quantidade_estoque: 10, preco: 50.00 })
-                .mockResolvedValueOnce({ id_produto: 2, quantidade_estoque: 0, preco: 100.00 }); // Estoque insuficiente
+                .mockResolvedValueOnce({ id_produto: 1, nome_produto: 'Produto Teste 1', quantidade_estoque: 10, preco: 50.00 })
+                .mockResolvedValueOnce({ id_produto: 2, nome_produto: 'Produto Teste 2', quantidade_estoque: 0, preco: 100.00 }); // Estoque insuficiente aqui
 
-            ProductModel.updateStock.mockRejectedValueOnce(new Error('Estoque insuficiente.')); // updateStock já lança esse erro
+            // Não precisamos mockar mockConnection.query para as updates de estoque aqui,
+            // pois o erro de estoque insuficiente é detectado ANTES de tentar atualizar o estoque
+            // no PedidoService (no primeiro loop de verificação).
 
             await expect(PedidoService.criarPedido(commonProducts, commonTotal, commonStatus, commonUserId))
-                .rejects.toThrow('Estoque insuficiente para o produto com ID: 2. Transação cancelada.'); // Mensagem do service
+                // CORRIGIDO: Mensagem esperada para corresponder à que o serviço gera
+                .rejects.toThrow('Estoque insuficiente para o produto "Produto Teste 2". Disponível: 0, solicitado: 1 Transação cancelada.');
 
             expect(mockConnection.beginTransaction).toHaveBeenCalledTimes(1);
             expect(mockConnection.rollback).toHaveBeenCalledTimes(1);
             expect(mockConnection.commit).not.toHaveBeenCalled();
             expect(mockConnection.release).toHaveBeenCalledTimes(1);
-            expect(ProductModel.updateStock).toHaveBeenCalledTimes(1); // Foi chamado para o 1º produto
+            expect(ProductModel.updateStock).not.toHaveBeenCalled(); // ProductModel.updateStock NÃO deve ser chamado pois o erro ocorre na verificação inicial
             expect(mockConnection.query).not.toHaveBeenCalledWith(expect.stringContaining('INSERT INTO Pedidos')); // Pedido principal não deve ser inserido
+            expect(mockConnection.query).not.toHaveBeenCalledWith(expect.stringContaining('INSERT INTO ItensPedido')); // Itens não devem ser inseridos
         });
 
-        test('4. deve lançar erro e fazer rollback se a inserção do pedido principal falhar', async () => {
-            ProductModel.getProductById
-                .mockResolvedValueOnce({ id_produto: 1, quantidade_estoque: 10, preco: 50.00 })
-                .mockResolvedValueOnce({ id_produto: 2, quantidade_estoque: 5, preco: 100.00 });
 
-            mockConnection.query.mockRejectedValueOnce(new Error('Falha na inserção do pedido.')); // Falha na 1ª query (inserção do pedido)
+        test('4. deve lançar erro e fazer rollback se a inserção do pedido principal falhar', async () => {
+            // ProductModel.getProductById já é mockado no beforeEach para retornar estoque suficiente.
+
+            // Mockando a 1ª chamada de query para falhar (inserção do pedido)
+            mockConnection.query.mockRejectedValueOnce(new Error('Falha na inserção do pedido.'));
 
             await expect(PedidoService.criarPedido(commonProducts, commonTotal, commonStatus, commonUserId))
-                .rejects.toThrow('Falha na inserção do pedido.');
+                .rejects.toThrow('Falha na inserção do pedido. Transação cancelada.');
 
             expect(mockConnection.beginTransaction).toHaveBeenCalledTimes(1);
             expect(mockConnection.rollback).toHaveBeenCalledTimes(1);
@@ -180,15 +186,17 @@ describe('PedidoService', () => {
         });
 
         test('5. deve lançar erro e fazer rollback se a atualização de estoque falhar', async () => {
-            ProductModel.getProductById
-                .mockResolvedValueOnce({ id_produto: 1, quantidade_estoque: 10, preco: 50.00 })
-                .mockResolvedValueOnce({ id_produto: 2, quantidade_estoque: 5, preco: 100.00 });
+            // ProductModel.getProductById já é mockado no beforeEach para retornar estoque suficiente.
 
-            mockConnection.query.mockResolvedValueOnce(mockDMLResult(101, 1)); // Inserção do pedido ok
+            // SOBRESCRITO: ProductModel.updateStock para o produto 2 deve FALHAR
+            ProductModel.updateStock.mockResolvedValueOnce(true) // Product 1 updates successfully
+                                   .mockRejectedValueOnce(new Error('Erro ao atualizar estoque para produto 2.')); // Product 2 update fails
 
-            ProductModel.updateStock
-                .mockResolvedValueOnce(true)
-                .mockRejectedValueOnce(new Error('Erro ao atualizar estoque para produto 2.')); // Falha na atualização do segundo produto
+            // Mocks para mockConnection.query (agora apenas 2 chamadas, antes da falha de updateStock do produto 2)
+            mockConnection.query
+                .mockResolvedValueOnce(mockDMLResult(101, 1)) // 1ª: INSERT INTO Pedidos (sucesso)
+                .mockResolvedValueOnce(mockDMLResult(null, 1)); // 2ª: INSERT INTO ItensPedido item 1 (sucesso)
+
 
             await expect(PedidoService.criarPedido(commonProducts, commonTotal, commonStatus, commonUserId))
                 .rejects.toThrow('Erro ao atualizar estoque para produto 2. Transação cancelada.');
@@ -198,36 +206,54 @@ describe('PedidoService', () => {
             expect(mockConnection.commit).not.toHaveBeenCalled();
             expect(mockConnection.release).toHaveBeenCalledTimes(1);
             expect(ProductModel.updateStock).toHaveBeenCalledTimes(2); // Ambas as chamadas devem ter sido tentadas
-            expect(mockConnection.query).toHaveBeenCalledWith(expect.stringContaining('INSERT INTO Pedidos')); // Pedido principal deve ter sido inserido
-            expect(mockConnection.query).not.toHaveBeenCalledWith(expect.stringContaining('INSERT INTO ItensPedido')); // Itens não devem ser inseridos
+            expect(ProductModel.updateStock).toHaveBeenCalledWith(1, -2, mockConnection);
+            expect(ProductModel.updateStock).toHaveBeenCalledWith(2, -1, mockConnection);
+            expect(mockConnection.query).toHaveBeenCalledTimes(2); // APENAS 2 CHAMADAS DEVEM TER OCORRIDO AQUI
+            
+            // Verificações explícitas das chamadas e seus argumentos
+            expect(mockConnection.query.mock.calls[0][0]).toContain('INSERT INTO Pedidos');
+            expect(mockConnection.query.mock.calls[0][1]).toEqual([commonUserId, commonTotal, commonStatus]);
+
+            expect(mockConnection.query.mock.calls[1][0]).toContain('INSERT INTO ItensPedido');
+            expect(mockConnection.query.mock.calls[1][1]).toEqual([101, 1, 2, 50.00]);
         });
 
         test('6. deve lançar erro e fazer rollback se a inserção de um item do pedido falhar', async () => {
-            ProductModel.getProductById
-                .mockResolvedValueOnce({ id_produto: 1, quantidade_estoque: 10, preco: 50.00 })
-                .mockResolvedValueOnce({ id_produto: 2, quantidade_estoque: 5, preco: 100.00 });
+            // ProductModel.getProductById já é mockado no beforeEach para retornar estoque suficiente.
 
-            mockConnection.query.mockResolvedValueOnce(mockDMLResult(101, 1)); // Inserção do pedido ok
+            // Mocks para mockConnection.query:
+            // O erro deve ocorrer na 3ª chamada, que é a inserção do 2º item do pedido.
+            mockConnection.query
+                .mockResolvedValueOnce(mockDMLResult(101, 1)) // 1ª: INSERT INTO Pedidos
+                .mockResolvedValueOnce(mockDMLResult(null, 1)) // 2ª: INSERT INTO ItensPedido item 1
+                .mockRejectedValueOnce(new Error('Falha ao inserir item de pedido.')); // 3ª: INSERT INTO ItensPedido item 2 (FALHA INTENCIONAL)
 
-            ProductModel.updateStock
-                .mockResolvedValueOnce(true)
-                .mockResolvedValueOnce(true); // Atualizações de estoque ok
-
-            mockConnection.query // A 1ª query é a inserção do pedido, a 2ª seria o 1º item do pedido
-                .mockResolvedValueOnce(mockDMLResult(null, 1)) // Inserção pedido ok
-                .mockRejectedValueOnce(new Error('Falha ao inserir item de pedido.')); // Falha na inserção do item
 
             await expect(PedidoService.criarPedido(commonProducts, commonTotal, commonStatus, commonUserId))
                 .rejects.toThrow('Falha ao inserir item de pedido. Transação cancelada.');
 
+            // Asserções
             expect(mockConnection.beginTransaction).toHaveBeenCalledTimes(1);
             expect(mockConnection.rollback).toHaveBeenCalledTimes(1);
             expect(mockConnection.commit).not.toHaveBeenCalled();
             expect(mockConnection.release).toHaveBeenCalledTimes(1);
-            expect(ProductModel.updateStock).toHaveBeenCalledTimes(2); // Atualizações de estoque devem ter sido feitas
-            expect(mockConnection.query).toHaveBeenCalledWith(expect.stringContaining('INSERT INTO Pedidos')); // Pedido principal deve ter sido inserido
-            expect(mockConnection.query).toHaveBeenCalledWith(expect.stringContaining('INSERT INTO ItensPedido'), [101, 1, 2, 50.00]); // 1º item deve ter sido tentado
-            expect(mockConnection.query).not.toHaveBeenCalledWith(expect.stringContaining('INSERT INTO ItensPedido'), [101, 2, 1, 100.00]); // 2º item não deve ter sido tentado
+
+            expect(ProductModel.getProductById).toHaveBeenCalledTimes(2);
+            expect(ProductModel.getProductById).toHaveBeenCalledWith(1);
+            expect(ProductModel.getProductById).toHaveBeenCalledWith(2);
+
+            expect(ProductModel.updateStock).toHaveBeenCalledTimes(2);
+            expect(ProductModel.updateStock).toHaveBeenCalledWith(1, -2, mockConnection);
+            expect(ProductModel.updateStock).toHaveBeenCalledWith(2, -1, mockConnection);
+
+            expect(mockConnection.query).toHaveBeenCalledTimes(3); // Deve haver 3 chamadas no total
+            // Verificações explícitas das chamadas e seus argumentos
+            expect(mockConnection.query.mock.calls[0][0]).toContain('INSERT INTO Pedidos');
+            expect(mockConnection.query.mock.calls[0][1]).toEqual([commonUserId, commonTotal, commonStatus]);
+
+            expect(mockConnection.query.mock.calls[1][0]).toContain('INSERT INTO ItensPedido');
+            expect(mockConnection.query.mock.calls[1][1]).toEqual([101, 1, 2, 50.00]);
+            // A 3ª chamada falha, então não esperamos asserções de sucesso para o 2º item aqui.
         });
     });
 });
