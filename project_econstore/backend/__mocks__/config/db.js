@@ -1,4 +1,4 @@
-// backend/__mocks__/config/db.js
+// project_econstore/backend/__mocks__/config/db.js
 
 const mockQueryResult = (rows = [], affectedRows = 0, insertId = null) => [
   rows,
@@ -8,6 +8,9 @@ const mockQueryResult = (rows = [], affectedRows = 0, insertId = null) => [
 const mockConnection = {
   query: jest.fn(),
   release: jest.fn(),
+  beginTransaction: jest.fn(),
+  commit: jest.fn(),
+  rollback: jest.fn(),
 };
 
 const mockPool = {
